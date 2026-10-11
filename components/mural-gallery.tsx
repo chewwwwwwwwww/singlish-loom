@@ -4,6 +4,8 @@ import { useId, useMemo, useState } from "react";
 import { ArrowUpRight, ImageOff, Search, X } from "lucide-react";
 import Link from "next/link";
 import { ArtworkImage } from "./artwork-view";
+import { isCreativeInterpretation, MeaningBadge } from "./loom-ui";
+import { hasDictionaryMeaning } from "../lib/meaning-attribution";
 import { MURAL_ZONES, type MuralPatch } from "../lib/mural-composition";
 
 const ZONES: { key: MuralPatch["zone"] | "all"; label: string }[] = [
@@ -37,7 +39,7 @@ export function MuralGallery({ patches, selectedKey, onSelect }: {
 
   return <section className="mural-gallery" aria-label="Explore the contributed phrases">
     <div className="mural-gallery-intro">
-      <div><h2>Meet the phrases.</h2><p>Every illustration has a meaning and a story. Choose one to look closer.</p></div>
+      <div><h2>Meet the phrases.</h2><p>Checked meanings, creative expressions and imagined stories. Choose one to look closer.</p></div>
       <span>{patches.length.toLocaleString("en-SG")} {patches.length === 1 ? "phrase" : "phrases"} in the kopitiam</span>
     </div>
     <div className="mural-gallery-tools">
@@ -63,6 +65,7 @@ export function MuralGallery({ patches, selectedKey, onSelect }: {
           <span className="mural-gallery-caption">
             <span className="mural-gallery-card-top"><span>{ZONES.find(item => item.key === patch.zone)?.label}</span><span>{patch.count.toLocaleString("en-SG")} {patch.count === 1 ? "contribution" : "contributions"}</span></span>
             <span className="mural-gallery-phrase">{patch.phrase}</span>
+            <MeaningBadge verified={patch.verified} dictionary={hasDictionaryMeaning(patch)} creative={isCreativeInterpretation(patch)}/>
             <span className="mural-gallery-meaning">{patch.meaning}</span>
             <span className="mural-gallery-open">Explore the phrase <ArrowUpRight size={15} aria-hidden="true"/></span>
           </span>
@@ -72,6 +75,6 @@ export function MuralGallery({ patches, selectedKey, onSelect }: {
       <h3>No phrases match this search.</h3><p>Try another word or explore every part of the kopitiam.</p>
       <button type="button" className="text-link" onClick={() => { setQuery(""); setZone("all"); }}>Show all phrases <ArrowUpRight size={15} aria-hidden="true"/></button>
     </div>}
-    <p className="mural-gallery-footnote">Repeated phrases share one illustration. Each visitor brings another object to the shared scene. The imagined scenes and stories are fiction; the meaning keeps its source.</p>
+    <p className="mural-gallery-footnote">Repeated phrases share one illustration. Each visitor brings another object to the shared scene. Meanings keep their evidence labels; visitor expressions without a confirmed source stay unverified. The scenes and stories are fiction.</p>
   </section>;
 }

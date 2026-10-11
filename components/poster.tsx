@@ -5,6 +5,7 @@ import { ArrowDownToLine, ArrowUpRight, Check, Copy, Maximize2, Minimize2 } from
 import type { LoomRecord } from "../lib/types";
 
 import { DICTIONARY_LICENSE, hasDictionaryMeaning } from "../lib/meaning-attribution";
+import { isCreativeInterpretation, MeaningBadge, meaningBadgeLabel } from "./loom-ui";
 
 const COLORS = ["#e3eba4", "#e16643", "#c9d9ec", "#d2c3e4", "#efca75", "#b4d3c0"];
 const INK = "#174e45";
@@ -163,7 +164,7 @@ async function createPoster(record: LoomRecord, shareUrl: string, qrSrc: string)
   }
 
   ctx.fillStyle = INK;
-  drawStamp(ctx, hasDictionaryMeaning(record) ? "DICTIONARY-BACKED MEANING" : record.verified ? "VERIFIED MEANING" : "UNVERIFIED DRAFT", 72, artwork ? 1050 : 636);
+  drawStamp(ctx, meaningBadgeLabel({ verified: record.verified, dictionary: hasDictionaryMeaning(record), creative: isCreativeInterpretation(record) }), 72, artwork ? 1050 : 636);
   ctx.font = `400 ${artwork ? 23 : 29}px ${BODY}`;
   const meaning = excerpt(ctx, record.meaning, artwork ? 490 : 1056, 3);
   drawLines(ctx, meaning.lines, 72, artwork ? 1100 : 689, artwork ? 30 : 37);
@@ -310,7 +311,7 @@ export function Poster({ record, expanded = false }: { record: LoomRecord; expan
           <figcaption style={{ marginTop: 8, fontSize: 10, fontWeight: 700, letterSpacing: ".05em" }}>{record.artwork.provider === "studio" ? "ILLUSTRATION · STUDIO SAMPLE" : record.artwork.cached ? "ILLUSTRATION · GEMINI · SAVED ARTWORK" : "ILLUSTRATION · GENERATED WITH GEMINI"}</figcaption>
         </figure>}
         <div className={`tile-pattern pattern-${((record.palette % 4) + 4) % 4}`} aria-hidden="true" />
-        <span className="stamp">{hasDictionaryMeaning(record) ? "✓ DICTIONARY-BACKED MEANING" : record.verified ? "✓ VERIFIED MEANING" : "○ UNVERIFIED DRAFT"}</span>
+        <MeaningBadge verified={record.verified} dictionary={hasDictionaryMeaning(record)} creative={isCreativeInterpretation(record)}/>
         <p>{record.meaning}</p>
         {hasDictionaryMeaning(record) && <p className="dictionary-attribution">Meaning excerpt: <a href={record.sourceUrl || "#"} target="_blank" rel="noreferrer">Wiktionary contributors</a> · <a href={DICTIONARY_LICENSE} target="_blank" rel="noreferrer">CC BY-SA 4.0</a> · shortened.</p>}
         {open && <>

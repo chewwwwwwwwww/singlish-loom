@@ -31,6 +31,7 @@
 .mural-gallery-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:var(--muted);font-size:9px;line-height:1.5}
 .mural-gallery-card-top>span:last-child{white-space:nowrap}
 .mural-gallery-phrase{display:block;font:650 clamp(24px,2.5vw,31px)/1.08 var(--display);letter-spacing:-.8px;margin:12px 0;overflow-wrap:anywhere}
+.mural-gallery-caption>.stamp{max-width:100%;margin-bottom:10px;line-height:1.45}
 .mural-gallery-meaning{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:12px;color:#5b7063;line-height:1.7;min-height:40px}
 .mural-gallery-open{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:600;border-top:1px solid #e3e6d9;padding-top:13px;margin-top:20px;gap:12px}
 .mural-gallery-art-missing{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:22px;text-align:center;font-size:12px;color:var(--ink)}

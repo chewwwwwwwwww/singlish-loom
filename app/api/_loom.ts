@@ -3,7 +3,8 @@ import { asc, desc, eq, isNull, sql } from "drizzle-orm";
 import { getDb } from "../../db";
 import { threads } from "../../db/schema";
 import { matchCorpus, validatePhrase } from "../../lib/corpus";
-import { generateText, phrasePalette, UnsafeGenerationError } from "../../lib/generation";
+import { resolveSupportedTerm } from "../../lib/dictionary";
+import { generateText, GenerationUnavailableError, phrasePalette, UnsafeGenerationError } from "../../lib/generation";
 import { checkPhrase, requireCheckedTerm, UnknownPhraseError } from "../../lib/phrase-check";
 import { canonicalArtPhrase, ensureArtwork, freezeArtwork, getCachedArtwork, serveArtwork, visibleArtwork } from "../../lib/artwork";
 import { STUDIO_ART } from "../../lib/studio-art";
@@ -35,6 +36,8 @@ function toRecord(row: typeof threads.$inferSelect): LoomRecord {
     voice: row.voice, voiceMode: row.voiceMode, verified: row.verified,
     source: row.source, sourceUrl: row.sourceUrl, createdAt: row.createdAt,
     palette: row.palette, mode: row.mode,
+    provenance: matchCorpus(row.phrase) ? "collection" : resolveSupportedTerm(row.phrase) ? "reviewed"
+      : row.source && row.sourceUrl ? "discovered" : "creative",
     artwork: visibleArtwork(row.artwork),
   };
 }
@@ -82,13 +85,15 @@ export async function postGenerate(request: Request): Promise<Response> {
     if (voiceMode !== "story" && voiceMode !== "lyric") return json({ error: "Choose story or lyric." }, 400);
     const requestId = payload.requestId === undefined ? crypto.randomUUID() : payload.requestId;
     if (typeof requestId !== "string" || !UUID.test(requestId)) return json({ error: "Refresh the loom and try again." }, 400);
-    // Reference membership is checked before database writes, rate claims or
-    // provider calls. Suggested spellings must be submitted by the visitor.
-    const entry = await requireCheckedTerm(validated.phrase, { db: runtime.DB });
-    const phrase = entry.term;
     const db = getDb();
     const prior = await db.select().from(threads).where(eq(threads.requestId, requestId)).get();
     if (prior) return json((await decorateRecords([prior]))[0]);
+    // Re-resolve every new submission server-side. Visitor-supplied meanings,
+    // verification flags and check responses never establish cultural evidence.
+    // Clear spellings share one canonical phrase; other safe input is explicitly
+    // a creative interpretation, even when the dictionary is unavailable.
+    const entry = await requireCheckedTerm(validated.phrase, { db: runtime.DB });
+    const phrase = entry.term;
     if (!await claimSubmission(request)) return json({ error: "The loom is busy. Give it a moment, then try again." }, 429, { "Retry-After": "2" });
     const generated = await generateText(phrase, voiceMode, {
       apiKey: runtime.OPENAI_API_KEY, model: runtime.OPENAI_MODEL,
@@ -97,7 +102,9 @@ export async function postGenerate(request: Request): Promise<Response> {
     });
     // Text safety approval precedes any paid image request.
     const artwork = matchCorpus(phrase)
-      ? await getCachedArtwork(phrase, artworkConfig()) : await ensureArtwork(phrase, { ...artworkConfig(), meaning: entry.meaning });
+      ? await getCachedArtwork(phrase, artworkConfig()) : await ensureArtwork(phrase, {
+        ...artworkConfig(), meaning: entry.provenance === "creative" ? undefined : entry.meaning,
+      });
     const record = {
       id: crypto.randomUUID(), requestId, phrase,
       ...generated, voiceMode, verified: entry.verified,
@@ -112,6 +119,7 @@ export async function postGenerate(request: Request): Promise<Response> {
   } catch (error) {
     if (error instanceof UnknownPhraseError) return json(error.payload, error.payload.retryable ? 503 : 422);
     if (error instanceof UnsafeGenerationError) return json({ error: error.message }, 422);
+    if (error instanceof GenerationUnavailableError) return json({ error: error.message }, 503);
     console.error("Singlish Loom generation unavailable:", error instanceof Error ? error.name : "error");
     return json({ error: "The loom is taking a short pause. Your phrase was not added; try again in a moment." }, 503);
   }

@@ -1,5 +1,6 @@
 import { compactPhrase, normalizePhrase } from "./corpus";
 import { resolveSupportedTerm } from "./dictionary";
+import { canonicalCreativePhrase, resolvePhraseVariant } from "./phrase-variants";
 import type { LoomArtwork, MuralContribution, MuralResponse } from "./types";
 
 export type MuralZone = "table" | "counter" | "conversation" | "street";
@@ -118,12 +119,12 @@ export function groupMuralContributions(records: readonly MuralContribution[]): 
 
   const groups = new Map<string, MuralContribution[]>();
   for (const record of unique) {
-    const known = resolveSupportedTerm(record.phrase);
+    const known = resolvePhraseVariant(record.phrase)?.entry;
     const variants = discovered.get(compactPhrase(record.phrase));
     // Stable choice: the first existing accepted phrase owns the patch name.
     // Discovered variants merge only with one consistent source definition.
     const unambiguous = variants && variants.identities.size === 1;
-    const canonical = known?.term ?? normalizePhrase(unambiguous ? variants.first.phrase : record.phrase);
+    const canonical = known?.term ?? canonicalCreativePhrase(unambiguous ? variants.first.phrase : record.phrase);
     const group = groups.get(canonical) ?? [];
     group.push(record);
     groups.set(canonical, group);

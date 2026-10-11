@@ -3,8 +3,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { registerHooks } from "node:module";
 import { CORPUS, isBlockedPhrase, matchCorpus, matchTermVariants, normalizePhrase, suggestCorpus, validatePhrase } from "../lib/corpus";
-import { generateGeminiText, generateText, parseModelText, phrasePalette, preparedGeneration, UnsafeGenerationError } from "../lib/generation";
-import { checkPhrase, checkSupportedPhrase, UnknownPhraseError } from "../lib/phrase-check";
+import { generateGeminiText, generateText, GenerationUnavailableError, parseModelText, phrasePalette, preparedGeneration, UnsafeGenerationError } from "../lib/generation";
+import { checkPhrase, checkSupportedPhrase, requireCheckedTerm, UnknownPhraseError } from "../lib/phrase-check";
 import { resolveSupportedTerm } from "../lib/dictionary";
 import { fetchWiktionaryReference, parseWiktionaryReference, REFERENCE_DAILY_LIMIT, resolveLiveReference } from "../lib/live-reference";
 import { ART_DAILY_LIMIT, artworkBrief, artworkId, decodeImagePart, D1ArtworkStore, ensureArtwork, freezeArtwork, generateGeminiImage, getCachedArtwork, recordArtwork, serveArtwork, visibleArtwork } from "../lib/artwork";
@@ -134,7 +134,7 @@ await test("unsupported phrases and typos are refused before any provider or fal
   assert.equal(alias.phrase, "aiyo");
 });
 
-await test("check endpoint confirms references and returns actionable typos without generation", async () => {
+await test("check endpoint canonicalizes clear typos and accepts creative input without claiming evidence", async () => {
   const request = (phrase: unknown) => new Request("https://loom.example/api/check", {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phrase }),
   });
@@ -142,19 +142,25 @@ await test("check endpoint confirms references and returns actionable typos with
   assert.equal(accepted.status, 200);
   assert.equal((await accepted.json() as AcceptedPhrase).phrase, "blur sotong");
   const typo = await postCheck(request("blur sotng"));
-  assert.equal(typo.status, 422);
-  const rejected = await typo.json() as UnknownPhrase;
-  assert.equal(rejected.accepted, false);
-  assert.equal(rejected.code, "UNKNOWN_PHRASE");
-  assert.ok(rejected.suggestions.some((entry: { phrase: string }) => entry.phrase === "blur sotong"));
-  assert.equal((await postCheck(request("qzxv nonsense spool"))).status, 422);
+  assert.equal(typo.status, 200);
+  const corrected = await typo.json() as AcceptedPhrase;
+  assert.equal(corrected.phrase, "blur sotong");
+  assert.equal(corrected.resolution, "spelling");
+  const unknown = await postCheck(request("qzxv nonsense spool"));
+  assert.equal(unknown.status, 200);
+  const creative = await unknown.json() as AcceptedPhrase;
+  assert.equal(creative.provenance, "creative");
+  assert.equal(creative.verified, false);
+  assert.equal(creative.source, null);
+  assert.equal(creative.sourceUrl, null);
+  assert.match(creative.meaning, /No confirmed dictionary meaning/);
   assert.equal((await postCheck(request("a"))).status, 400);
   assert.equal((await postCheck(request("fuck you"))).status, 400);
 });
 
-await test("generate handler rejects unsupported phrases before needing database or providers", async () => {
-  // Empty bindings deliberately make database access fail: a 422 demonstrates
-  // the reference gate executes first. No real worker bindings or keys are read.
+await test("generate handler rejects invalid or unsafe input before needing database or providers", async () => {
+  // Empty bindings deliberately make database access fail: input validation
+  // must still reject these requests before touching any binding or provider.
   const hooks = registerHooks({ resolve(specifier, context, nextResolve) {
     return specifier === "cloudflare:workers"
       ? { url: "data:text/javascript,export const env = globalThis.__loomTestEnv;", shortCircuit: true }
@@ -162,15 +168,12 @@ await test("generate handler rejects unsupported phrases before needing database
   } });
   try {
     const { postGenerate } = await import("../app/api/_loom");
-    for (const phrase of ["blur sotng", "qzxv nonsense spool"]) {
+    for (const phrase of ["a", "fuck you", "go to https://example.com"]) {
       const result = await postGenerate(new Request("https://loom.example/api/generate", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phrase, requestId: crypto.randomUUID() }),
       }));
-      assert.equal(result.status, 422);
-      const rejection = await result.json() as UnknownPhrase;
-      assert.equal(rejection.code, "UNKNOWN_PHRASE");
-      assert.equal(rejection.accepted, false);
+      assert.equal(result.status, 400);
     }
   } finally { hooks.deregister(); }
 });
@@ -263,6 +266,43 @@ await test("Gemini safety blocks refuse and malformed/provider failures fall bac
   await assert.rejects(generateText("kiasu", "story", { geminiApiKey: "test-only", fetcher: async () => new Response(JSON.stringify({ promptFeedback: { blockReason: "SAFETY" } })) }), UnsafeGenerationError);
   const result = await generateText("kiasu", "story", { geminiApiKey: "test-only", fetcher: async () => new Response("unavailable", { status: 503 }) });
   assert.equal(result.mode, "demo");
+});
+
+await test("creative writing stays unverified and ignores model attempts to manufacture a definition", async () => {
+  const reference = await requireCheckedTerm("kopi before the moon arrives", {});
+  assert.equal(reference.provenance, "creative");
+  let instructions = "";
+  const text = await generateText(reference.term, "story", {
+    reference, geminiApiKey: "test-only", fetcher: async (_url, init) => {
+      const body = JSON.parse(String(init?.body));
+      instructions = body.systemInstruction.parts[0].text;
+      return geminiReply({ ...sample, meaning: "A historic Singlish idiom from 1824." });
+    },
+  });
+  assert.equal(text.mode, "live");
+  assert.equal(text.meaning, reference.meaning);
+  assert.match(text.meaning, /No confirmed dictionary meaning/);
+  assert.match(instructions, /Do not claim it is established Singlish/);
+  assert.match(instructions, /invent a source/);
+  assert.equal(reference.verified, false);
+  assert.equal(reference.source, null);
+  assert.equal(reference.sourceUrl, null);
+});
+
+await test("creative provider failures cannot bypass the public-wall safety review", async () => {
+  const reference = await requireCheckedTerm("kopi before the moon arrives", {});
+  for (const fetcher of [
+    async () => new Response("unavailable", { status: 503 }),
+    async () => geminiReply({ ...sample, myth: "A factual origin claim." }),
+    async () => geminiReply({ ...sample, voice: "One lyric line" }),
+  ]) await assert.rejects(generateText(reference.term, "lyric", { reference, geminiApiKey: "test-only", fetcher }), GenerationUnavailableError);
+  await assert.rejects(generateText(reference.term, "story", { reference }), GenerationUnavailableError);
+  await assert.rejects(generateText(reference.term, "story", {
+    reference, geminiApiKey: "test-only", fetcher: async () => geminiReply({ ...sample, safe: false }),
+  }), UnsafeGenerationError);
+  await assert.rejects(generateText(reference.term, "story", {
+    reference, apiKey: "test-only", fetcher: async () => reply({ ...sample, safe: false }),
+  }), UnsafeGenerationError);
 });
 
 const PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a3ioAAAAASUVORK5CYII=";
@@ -378,9 +418,50 @@ await test("negative caches, in-flight leases and dictionary budgets prevent rep
   } finally { storage.sqlite.close(); }
 });
 
-await test("artwork keys canonicalize aliases while preserving unknown spellings", async () => {
+await test("missing references and dictionary outages allow explicitly creative checks", async () => {
+  const storage = testStorage();
+  let calls = 0;
+  const fetcher: typeof fetch = async input => {
+    calls++;
+    return new URL(String(input)).searchParams.get("page") === "dictionary paused"
+      ? new Response("unavailable", { status: 503 }) : Response.json({ error: { code: "missingtitle" } });
+  };
+  try {
+    for (const phrase of ["kopi before moon la", "kopi before moon lah"]) {
+      const checked = await checkPhrase(phrase, { db: storage.db, fetcher });
+      assert.equal(checked.accepted, true);
+      if (!checked.accepted) throw new Error("Visitor expression should remain creative");
+      assert.equal(checked.phrase, "kopi before moon lah");
+      assert.equal(checked.provenance, "creative");
+      assert.equal(checked.referenceStatus, "not_found");
+      assert.equal(checked.verified, false);
+      assert.equal(checked.sourceUrl, null);
+    }
+    assert.equal(calls, 1);
+    for (const phrase of ["your head la", "your head ah"]) {
+      const checked = await checkPhrase(phrase, { db: storage.db, fetcher });
+      assert.equal(checked.accepted, true);
+      if (!checked.accepted) throw new Error("Reviewed phrase should be accepted");
+      assert.equal(checked.phrase, "your head");
+      assert.equal(checked.provenance, "reviewed");
+      assert.ok(checked.sourceUrl);
+    }
+    assert.equal(calls, 1);
+    const paused = await checkPhrase("dictionary paused", { db: storage.db, fetcher });
+    assert.equal(paused.accepted, true);
+    if (!paused.accepted) throw new Error("Outage should keep creative generation available");
+    assert.equal(paused.provenance, "creative");
+    assert.equal(paused.referenceStatus, "unavailable");
+    assert.equal(paused.verified, false);
+    assert.equal(paused.source, null);
+    assert.equal(paused.sourceUrl, null);
+  } finally { storage.sqlite.close(); }
+});
+
+await test("artwork keys canonicalize aliases and clear typos while preserving unrelated phrases", async () => {
   assert.equal(await artworkId(" blur like sotong?! "), await artworkId("blur sotong"));
-  assert.notEqual(await artworkId("blur sotng"), await artworkId("blur sotong"));
+  assert.equal(await artworkId("blur sotng"), await artworkId("blur sotong"));
+  assert.notEqual(await artworkId("blur something"), await artworkId("blur sotong"));
   assert.match(artworkBrief("kancheong spider").prompt, /Do NOT draw a spider/);
   assert.match(artworkBrief("kancheong spider").prompt, /eight soft curved fabric ribbon arms/);
 });
@@ -546,12 +627,77 @@ await test("generate handler serves corpus instantly and dictionary aliases shar
     assert.equal(referenceCalls, 0);
     assert.equal(storage.sqlite.prepare("SELECT sum(used) AS total FROM artwork_budgets").get()?.total, 1);
     const before = Number(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total);
-    const rejected = await submit("qzxv nonsense spool");
-    assert.equal(rejected.status, 422);
-    assert.equal(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total, before);
+    const creative = await submit("qzxv nonsense spool");
+    assert.equal(creative.status, 201);
+    const creativeRecord = await creative.json() as { verified: boolean; source: string | null; sourceUrl: string | null; provenance: string; meaning: string };
+    assert.equal(creativeRecord.provenance, "creative");
+    assert.equal(creativeRecord.verified, false);
+    assert.equal(creativeRecord.source, null);
+    assert.equal(creativeRecord.sourceUrl, null);
+    assert.match(creativeRecord.meaning, /No confirmed dictionary meaning/);
+    assert.equal(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total, before + 1);
+    assert.equal(textCalls, 3);
+    assert.equal(imageCalls, 2);
+    assert.equal(referenceCalls, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+    for (const key of Object.keys(testRuntime)) delete testRuntime[key];
+    storage.sqlite.close();
+  }
+});
+
+await test("creative route persists honest evidence, reuses images and makes retries idempotent", async () => {
+  const storage = testStorage(), originalFetch = globalThis.fetch;
+  let textCalls = 0, imageCalls = 0, referenceCalls = 0;
+  let modelState: "ready" | "unsafe" | "unavailable" = "ready";
+  Object.assign(testRuntime, { DB: storage.db, BUCKET: storage.bucket, GEMINI_API_KEY: "test-only" });
+  globalThis.fetch = async input => {
+    const url = String(input);
+    if (url.startsWith("https://en.wiktionary.org/")) { referenceCalls++; return Response.json({ error: { code: "missingtitle" } }); }
+    if (url.includes("gemini-nano-banana")) { imageCalls++; return imageReply(); }
+    textCalls++;
+    return modelState === "unavailable" ? new Response("unavailable", { status: 503 })
+      : geminiReply({ ...sample, safe: modelState !== "unsafe" });
+  };
+  const submit = (phrase: string, requestId = crypto.randomUUID()) => new Request("https://loom.example/api/generate", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phrase, requestId, verified: true, meaning: "Forged definition", source: "Forged source", sourceUrl: "https://example.com/forged" }),
+  });
+  try {
+    const { postGenerate, getThread } = await import("../app/api/_loom");
+    const requestId = crypto.randomUUID();
+    const first = await postGenerate(submit("kopi before moon la", requestId));
+    assert.equal(first.status, 201);
+    const record = await first.json() as { id: string; phrase: string; meaning: string; verified: boolean; provenance: string; source: null; sourceUrl: null; artwork: { url: string } };
+    assert.equal(record.phrase, "kopi before moon lah");
+    assert.equal(record.verified, false);
+    assert.equal(record.provenance, "creative");
+    assert.equal(record.source, null);
+    assert.equal(record.sourceUrl, null);
+    assert.match(record.meaning, /No confirmed dictionary meaning/);
+    assert.ok(record.artwork.url);
+    const retry = await postGenerate(submit("kopi before moon la", requestId));
+    assert.equal(retry.status, 200);
+    assert.equal((await retry.json() as { id: string }).id, record.id);
+    assert.equal(textCalls, 1);
+    assert.equal(imageCalls, 1);
+    assert.equal(referenceCalls, 1);
+    const second = await postGenerate(submit("kopi before moon lah"));
+    assert.equal(second.status, 201);
+    const repeated = await second.json() as typeof record;
+    assert.notEqual(repeated.id, record.id);
+    assert.equal(repeated.artwork.url, record.artwork.url);
     assert.equal(textCalls, 2);
     assert.equal(imageCalls, 1);
     assert.equal(referenceCalls, 1);
+    const shared = await getThread(new Request(`https://loom.example/api/thread?id=${record.id}`));
+    assert.equal((await shared.json() as typeof record).provenance, "creative");
+    modelState = "unsafe";
+    assert.equal((await postGenerate(submit("a rejected creative phrase"))).status, 422);
+    modelState = "unavailable";
+    assert.equal((await postGenerate(submit("a paused creative phrase"))).status, 503);
+    assert.equal(imageCalls, 1);
+    assert.equal(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total, 2);
   } finally {
     globalThis.fetch = originalFetch;
     for (const key of Object.keys(testRuntime)) delete testRuntime[key];
@@ -618,22 +764,26 @@ await test("route discovery fixes the dictionary meaning, generates new artwork 
     assert.equal(textCalls, 2);
     assert.equal(imageCalls, 1);
     const totalBefore = Number(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total);
-    const denied = await postGenerate(request("/api/generate", { phrase: "qzxv nonsense spool", accepted: true, meaning: "Invented definition", sourceUrl: "https://en.wiktionary.org/wiki/lepak", requestId: crypto.randomUUID() }));
-    assert.equal(denied.status, 422);
-    assert.equal((await denied.json() as UnknownPhrase).code, "UNKNOWN_PHRASE");
+    const creative = await postGenerate(request("/api/generate", { phrase: "qzxv nonsense spool", accepted: true, verified: true, meaning: "Invented definition", sourceUrl: "https://en.wiktionary.org/wiki/lepak", requestId: crypto.randomUUID() }));
+    assert.equal(creative.status, 201);
+    const creativeRecord = await creative.json() as { verified: boolean; provenance: string; sourceUrl: string | null; meaning: string };
+    assert.equal(creativeRecord.verified, false);
+    assert.equal(creativeRecord.provenance, "creative");
+    assert.equal(creativeRecord.sourceUrl, null);
+    assert.match(creativeRecord.meaning, /No confirmed dictionary meaning/);
     const paused = await postCheck(request("/api/check", { phrase: "dictionary paused" }));
-    assert.equal(paused.status, 503);
-    assert.equal((await paused.json() as UnknownPhrase).code, "REFERENCE_UNAVAILABLE");
-    assert.equal(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total, totalBefore);
-    assert.equal(textCalls, 2);
-    assert.equal(imageCalls, 1);
+    assert.equal(paused.status, 200);
+    assert.equal((await paused.json() as AcceptedPhrase).referenceStatus, "unavailable");
+    assert.equal(storage.sqlite.prepare("SELECT count(*) AS total FROM threads").get()?.total, totalBefore + 1);
+    assert.equal(textCalls, 3);
+    assert.equal(imageCalls, 2);
     // Older contributions outside /api/wall's 120-record gallery still weave.
     for (let index = 0; index < 130; index++) storage.sqlite.prepare(`
       INSERT INTO threads (id, request_id, phrase, meaning, myth, voice, voice_mode, verified, created_at, palette, mode)
       VALUES (?, ?, 'chope', 'Reserve a place.', 'In this invented tale, a chair smiled.', 'A story.', 'story', 1, ?, ?, 'prepared')
     `).run(`historical-${String(index).padStart(3, "0")}`, `request-${index}`, index, index % 6);
     const tapestry = await (await getTapestry()).json() as { records: { id: string; phrase: string; palette: number; createdAt: number }[]; total: number };
-    assert.equal(tapestry.total, 135);
+    assert.equal(tapestry.total, 136);
     assert.equal(tapestry.records.length, tapestry.total);
     assert.deepEqual(Object.keys(tapestry.records[0]).sort(), ["createdAt", "id", "palette", "phrase"]);
     assert.equal(tapestry.records[0].id, "historical-000");
@@ -641,7 +791,7 @@ await test("route discovery fixes the dictionary meaning, generates new artwork 
     assert.ok(tapestry.records.every((record, index, records) => !index || records[index - 1].createdAt <= record.createdAt));
     const gallery = await (await getWall()).json() as { records: unknown[]; total: number };
     assert.equal(gallery.records.length, 120);
-    assert.equal(gallery.total, 135);
+    assert.equal(gallery.total, 136);
   } finally {
     globalThis.fetch = originalFetch;
     for (const key of Object.keys(testRuntime)) delete testRuntime[key];
@@ -667,22 +817,22 @@ if (process.env.LOOM_TEST_URL) {
     const status = await response.json() as { durable: boolean };
     assert.equal(status.durable, true);
   });
-  await test("API checks references and blocks unsupported submissions without wall additions", async () => {
+  await test("API checks references, canonicalizes typos and offers honest creative interpretation", async () => {
     const supported = await call("/api/check", { phrase: "bojio" });
     assert.equal(supported.status, 200);
     assert.equal((await supported.json() as AcceptedPhrase).phrase, "bo jio");
     const typo = await call("/api/check", { phrase: "blur sotng" });
-    assert.equal(typo.status, 422);
-    assert.equal((await typo.json() as UnknownPhrase).code, "UNKNOWN_PHRASE");
+    assert.equal(typo.status, 200);
+    assert.equal((await typo.json() as AcceptedPhrase).phrase, "blur sotong");
     const phrase = `reference gap ${crypto.randomUUID().slice(0, 8)}`;
     const before = await (await call("/api/wall")).json() as { total: number };
-    for (const path of ["/api/generate", "/generate"]) {
-      const rejected = await call(path, { phrase });
-      assert.equal(rejected.status, 422);
-      const body = await rejected.json() as UnknownPhrase;
-      assert.equal(body.code, "UNKNOWN_PHRASE");
-      assert.equal(body.accepted, false);
-    }
+    const creativeCheck = await call("/api/check", { phrase });
+    assert.equal(creativeCheck.status, 200);
+    const creative = await creativeCheck.json() as AcceptedPhrase;
+    assert.equal(creative.provenance, "creative");
+    assert.equal(creative.verified, false);
+    assert.equal(creative.sourceUrl, null);
+    for (const path of ["/api/generate", "/generate"]) assert.equal((await call(path, { phrase: "fuck you" })).status, 400);
     const after = await (await call("/api/wall")).json() as { total: number; records: { phrase: string }[] };
     assert.ok(!after.records.some((entry) => entry.phrase === phrase));
     if (["127.0.0.1", "localhost"].includes(new URL(base).hostname)) assert.equal(after.total, before.total);

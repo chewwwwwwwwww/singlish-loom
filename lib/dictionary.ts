@@ -5,6 +5,14 @@ import type { CorpusTerm } from "./types";
 // Definitions are editorial paraphrases. No scraped commercial dictionary.
 export const DICTIONARY: CorpusTerm[] = [
   {
+    term: "your head",
+    meaning: "A sarcastic or dismissive reply rejecting someone's claim or suggestion—roughly 'nonsense' or 'as if!'. It can be teasing or scornful; tone and context matter.",
+    verified: true,
+    source: "NLB: MediaCorp Sar-Vivor Rap (usage); Robbie B. H. Goh, The anatomy of Singlish (2016)",
+    sourceUrl: "https://www.nlb.gov.sg/main/api/MusicDetailPage/ViewPdf?resourceUuid=43619a42-3a20-48bf-b079-93203a41cb6b",
+    aliases: ["your head la", "your head lah", "your head ah"],
+  },
+  {
     "term": "paiseh",
     "meaning": "Feeling embarrassed or shy; sometimes an apologetic expression.",
     "verified": true,

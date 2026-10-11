@@ -1,5 +1,7 @@
 export type VoiceMode = "story" | "lyric";
 export type GenerationMode = "demo" | "live" | "prepared";
+export type PhraseProvenance = "collection" | "reviewed" | "discovered" | "creative";
+export type PhraseResolution = "exact" | "variant" | "spelling" | "creative";
 
 export interface LoomArtwork {
   url: string;
@@ -25,6 +27,7 @@ export interface LoomRecord {
   createdAt: number;
   palette: number;
   mode: GenerationMode;
+  provenance?: PhraseProvenance;
   artwork?: LoomArtwork | null;
 }
 
@@ -75,6 +78,8 @@ export interface CorpusTerm {
   source: string | null;
   sourceUrl: string | null;
   aliases?: string[];
+  // Added only by server-side phrase resolution, never by visitor claims.
+  provenance?: PhraseProvenance;
 }
 
 export interface PhraseSuggestion {
@@ -90,7 +95,11 @@ export interface AcceptedPhrase {
   source: string | null;
   sourceUrl: string | null;
   availability: "prepared" | "live";
-  provenance: "collection" | "reviewed" | "discovered";
+  provenance: PhraseProvenance;
+  submittedPhrase?: string;
+  resolution?: PhraseResolution;
+  referenceStatus?: "not_found" | "unavailable";
+  suggestions?: PhraseSuggestion[];
 }
 
 export interface UnknownPhrase {

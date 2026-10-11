@@ -4,6 +4,7 @@
 import { useEffect, useRef } from "react";
 import { ArrowUpRight, MoveUpRight } from "lucide-react";
 import type { LoomRecord } from "../lib/types";
+import { matchCorpus } from "../lib/corpus";
 import { STUDIO_ART } from "../lib/studio-art";
 import { ArtworkImage, artworkLabel } from "./artwork-view";
 import { DICTIONARY_LICENSE, hasDictionaryMeaning } from "../lib/meaning-attribution";
@@ -68,13 +69,24 @@ export function WeavingCanvas({ checking = false }: { checking?: boolean }) {
     draw(performance.now());
     return () => cancelAnimationFrame(frame);
   }, []);
-  return <div className="weaving-stage"><canvas ref={ref} aria-hidden="true"/><div className="weaving-caption"><LoomMark/><h2>{checking?<>A quick check.<br/>A careful meaning.</>:<>A little patience.<br/>A lot of possibility.</>}</h2><p>{checking?<>Checking our collection, then the live dictionary.<br/>A published meaning comes before imagination.</>:<>Your illustration and story are coming together.<br/>A first-time image can take about a minute.</>}</p><span className="weaving-dots" aria-hidden="true">● ● ●</span></div></div>;
+  return <div className="weaving-stage"><canvas ref={ref} aria-hidden="true"/><div className="weaving-caption"><LoomMark/><h2>{checking?<>A quick check.<br/>Room for your words.</>:<>A little patience.<br/>A lot of possibility.</>}</h2><p>{checking?<>Looking for a familiar phrase or published meaning.<br/>New expressions can become creative interpretations.</>:<>Your illustration and story are coming together.<br/>A first-time image can take about a minute.</>}</p><span className="weaving-dots" aria-hidden="true">● ● ●</span></div></div>;
 }
 
-export function MeaningBadge({ verified, dictionary = false }: { verified: boolean; dictionary?: boolean }) {
-  return <span className={`stamp ${verified ? "verified" : "draft"}`}>{dictionary ? "✓ DICTIONARY-BACKED MEANING" : verified ? "✓ VERIFIED MEANING" : "○ UNVERIFIED DRAFT"}</span>;
+// Older saved threads do not carry provenance. Their immutable phrase and
+// source still distinguish a visitor expression from a prepared draft.
+export function isCreativeInterpretation(record: Pick<LoomRecord, "phrase" | "verified" | "source" | "sourceUrl"> & { provenance?: LoomRecord["provenance"] }) {
+  return record.provenance === "creative" || (!record.verified && !record.source && !record.sourceUrl && !matchCorpus(record.phrase));
+}
+
+export function meaningBadgeLabel({ verified, dictionary = false, creative = false }: { verified: boolean; dictionary?: boolean; creative?: boolean }) {
+  return dictionary ? "DICTIONARY-BACKED MEANING" : verified ? "VERIFIED MEANING" : creative ? "CREATIVE INTERPRETATION · UNVERIFIED" : "UNVERIFIED DRAFT";
+}
+
+export function MeaningBadge({ verified, dictionary = false, creative = false }: { verified: boolean; dictionary?: boolean; creative?: boolean }) {
+  return <span className={`stamp ${verified ? "verified" : "draft"}`}>{dictionary || verified ? "✓ " : "○ "}{meaningBadgeLabel({ verified, dictionary, creative })}</span>;
 }
 
 export function ResultCard({ record }: { record: LoomRecord }) {
-  return <div className="result-panes"><article className="meaning-pane"><MeaningBadge verified={record.verified} dictionary={hasDictionaryMeaning(record)}/><h3>What it means</h3><p>{record.meaning}</p>{record.sourceUrl && <a className="source-link" href={record.sourceUrl} target="_blank" rel="noreferrer">{record.source || "Read the source"} <ArrowUpRight size={14}/></a>}{hasDictionaryMeaning(record) && <small className="dictionary-attribution">Meaning excerpt: Wiktionary contributors. <a href={DICTIONARY_LICENSE} target="_blank" rel="noreferrer">CC BY-SA 4.0</a>. The selected definition is shortened; the linked revision preserves its source. Context still matters.</small>}{!record.verified && <small>This meaning needs a human check. Context matters.</small>}</article><article className="myth-pane"><span className="stamp fiction">✳ {record.mode === "prepared" ? "A MYTH · PREPARED FICTION" : record.mode === "demo" ? "A MYTH · STUDIO SAMPLE" : "A MYTH, WOVEN JUST NOW"}</span><h3>How it <em>could</em> have begun</h3><p>{record.myth}</p><small>Made-up folklore. {record.mode === "prepared" ? "Prepared for the collection." : record.mode === "demo" ? "Authored studio sample." : "Created with AI."} This is not the phrase’s real origin.</small></article><article className="voice-pane"><span className="stamp voice">↗ IN ITS OWN VOICE</span><h3>{record.voiceMode === "lyric" ? "Four lines, full feeling" : "A little everyday story"}</h3><p className={record.voiceMode === "lyric" ? "lyric" : ""}>{record.voice}</p><small>{record.mode === "prepared" ? "From our prepared collection" : record.mode === "demo" ? "From our demo collection" : "A new thread, made for you"}</small></article></div>;
+  const creative = isCreativeInterpretation(record);
+  return <div className="result-panes"><article className="meaning-pane"><MeaningBadge verified={record.verified} dictionary={hasDictionaryMeaning(record)} creative={creative}/><h3>{creative ? "A possible reading" : record.verified ? "What it means" : "What it could mean"}</h3><p>{record.meaning}</p>{record.sourceUrl && <a className="source-link" href={record.sourceUrl} target="_blank" rel="noreferrer">{record.source || "Read the source"} <ArrowUpRight size={14}/></a>}{hasDictionaryMeaning(record) && <small className="dictionary-attribution">Meaning excerpt: Wiktionary contributors. <a href={DICTIONARY_LICENSE} target="_blank" rel="noreferrer">CC BY-SA 4.0</a>. The selected definition is shortened; the linked revision preserves its source. Context still matters.</small>}{!record.verified && <small>{creative ? "A visitor expression explored with AI. No published meaning was confirmed; this interpretation may miss your intent." : "This meaning needs a human check. Context matters."}</small>}</article><article className="myth-pane"><span className="stamp fiction">✳ {record.mode === "prepared" ? "A MYTH · PREPARED FICTION" : record.mode === "demo" ? "A MYTH · STUDIO SAMPLE" : "A MYTH, WOVEN JUST NOW"}</span><h3>How it <em>could</em> have begun</h3><p>{record.myth}</p><small>Made-up folklore. {record.mode === "prepared" ? "Prepared for the collection." : record.mode === "demo" ? "Authored studio sample." : "Created with AI."} This is not the phrase’s real origin.</small></article><article className="voice-pane"><span className="stamp voice">↗ IN ITS OWN VOICE</span><h3>{record.voiceMode === "lyric" ? "Four lines, full feeling" : "A little everyday story"}</h3><p className={record.voiceMode === "lyric" ? "lyric" : ""}>{record.voice}</p><small>{record.mode === "prepared" ? "From our prepared collection" : record.mode === "demo" ? "From our demo collection" : "A new thread, made for you"}</small></article></div>;
 }
