@@ -1,0 +1,129 @@
+[
+  {
+    "term": "paiseh",
+    "meaning": "Feeling embarrassed or shy; sometimes an apologetic expression.",
+    "verified": true,
+    "source": "NUS Singapore Research Nexus: Small World of Singlish Words study",
+    "sourceUrl": "https://fass.nus.edu.sg/srn/2022/08/10/you-cant-tell-people-to-not-speak-it-says-nus-don-but-where-does-singlish-stand-now/",
+    "aliases": []
+  },
+  {
+    "term": "kiasu",
+    "meaning": "Afraid of losing out or missing an advantage.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  },
+  {
+    "term": "sian",
+    "meaning": "Bored or weary; also describes something tiresome.",
+    "verified": true,
+    "source": "NUS Faculty of Arts and Social Sciences: Cynthia Siew on human word associations",
+    "sourceUrl": "https://fass.nus.edu.sg/news/2025/11/27/value-of-human-word-associations-in-time-generative-language-models/",
+    "aliases": []
+  },
+  {
+    "term": "bo jio",
+    "meaning": "Why wasn't I invited? A reaction to being left out of an activity.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Singlish 101",
+    "sourceUrl": "https://www.visitsingapore.com/travel-tips/about-singapore/",
+    "aliases": ["bojio"],
+    "aliasSourceUrl": "https://www.visitsingapore.com/content/dam/desktop/id/about-singapore/traveller-information/q4-singapore-insider-2019-id.pdf"
+  },
+  {
+    "term": "jialat",
+    "meaning": "Things are going badly; describes a difficult or bleak situation.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Singlish 101",
+    "sourceUrl": "https://www.visitsingapore.com/travel-tips/about-singapore/",
+    "aliases": ["jia lat"]
+  },
+  {
+    "term": "lah",
+    "meaning": "A sentence-ending particle that adds emphasis or asks the listener to accept a view; tone changes its force.",
+    "verified": true,
+    "source": "Singlish Message Paraphrasing (COLING 2022), Table 10; NIE linguistic examples, Table 6",
+    "sourceUrl": "https://aclanthology.org/2022.coling-1.345.pdf",
+    "aliases": [],
+    "additionalSourceUrl": "https://repository.nie.edu.sg/server/api/core/bitstreams/090ee6f2-d76a-4fe4-8961-ac2005f72913/content"
+  },
+  {
+    "term": "lor",
+    "meaning": "A sentence-ending particle that can signal obviousness or resignation, depending on context and tone.",
+    "verified": true,
+    "source": "Singlish Message Paraphrasing (COLING 2022), Table 10",
+    "sourceUrl": "https://aclanthology.org/2022.coling-1.345.pdf",
+    "aliases": []
+  },
+  {
+    "term": "leh",
+    "meaning": "A sentence-ending particle used for a tentative suggestion or request, or to press a differing view; tone matters.",
+    "verified": true,
+    "source": "Singlish Message Paraphrasing (COLING 2022), Table 10; NIE linguistic examples, Table 6",
+    "sourceUrl": "https://aclanthology.org/2022.coling-1.345.pdf",
+    "aliases": [],
+    "additionalSourceUrl": "https://repository.nie.edu.sg/server/api/core/bitstreams/090ee6f2-d76a-4fe4-8961-ac2005f72913/content"
+  },
+  {
+    "term": "makan",
+    "meaning": "Eat, or have a meal.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  },
+  {
+    "term": "tapau",
+    "meaning": "Pack food to take away.",
+    "verified": true,
+    "source": "NIE: Repositioning Singlish in Singapore's language-in-education policies, Table 7",
+    "sourceUrl": "https://repository.nie.edu.sg/server/api/core/bitstreams/090ee6f2-d76a-4fe4-8961-ac2005f72913/content",
+    "aliases": ["tapao", "ta pau"],
+    "aliasSourceUrls": [
+      "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-q2-2016-eng-full-guide-single.pdf",
+      "https://aclanthology.org/2022.coling-1.345.pdf"
+    ]
+  },
+  {
+    "term": "alamak",
+    "meaning": "An exclamation of shock, dismay or surprise.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Singlish 101",
+    "sourceUrl": "https://www.visitsingapore.com/travel-tips/about-singapore/",
+    "aliases": []
+  },
+  {
+    "term": "bo pian",
+    "meaning": "There is no other choice; nothing can be done about it.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  },
+  {
+    "term": "catch no ball",
+    "meaning": "I don't understand what is being said.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  },
+  {
+    "term": "kopitiam",
+    "meaning": "A neighbourhood coffee shop or informal place to eat.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  },
+  {
+    "term": "kena",
+    "meaning": "Get or be affected by something, as in getting sunburned.",
+    "verified": true,
+    "source": "Singapore Tourism Board: Got Singlish? travel guide, p. 7",
+    "sourceUrl": "https://www.visitsingapore.com/content/dam/desktop/global/about-singapore/traveller-information/466-tos-singaporelbb-2015-complete-small.pdf",
+    "aliases": []
+  }
+]

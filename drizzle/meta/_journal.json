@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1791687878741,
+      "tag": "0000_dashing_master_mold",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791694510817,
+      "tag": "0001_funny_ogun",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791698579689,
+      "tag": "0002_optimal_ozymandias",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791701846526,
+      "tag": "0003_round_millenium_guard",
+      "breakpoints": true
+    }
+  ]
+}

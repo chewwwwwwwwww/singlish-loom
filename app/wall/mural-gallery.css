@@ -1,0 +1,51 @@
+.mural-gallery{padding:38px 0 52px;min-width:0}
+.mural-gallery-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:27px}
+.mural-gallery-intro h2{font:650 clamp(30px,3.2vw,43px)/1.04 var(--display);letter-spacing:-1.2px}
+.mural-gallery-intro p{font-size:13px;color:var(--muted);margin-top:11px;max-width:440px;line-height:1.65}
+.mural-gallery-intro>span{font-size:11px;white-space:nowrap;color:var(--muted);padding-bottom:3px}
+.mural-gallery-tools{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:22px 0;border-block:1px solid var(--line)}
+.mural-gallery-search{flex:0 1 340px;min-width:220px}
+.mural-gallery-search>label{display:block;font-size:11px;font-weight:600;margin-bottom:8px}
+.mural-gallery-search-field{display:flex;align-items:center;gap:10px;min-height:43px;border:1px solid #bfcbbd;border-radius:7px;padding:0 12px;background:#fffef8}
+.mural-gallery-search-field:focus-within{outline:3px solid var(--orange);outline-offset:3px}
+.mural-gallery-search-field>svg{color:var(--muted)}
+.mural-gallery-search input{min-width:0;width:100%;border:0;background:transparent;outline:none;color:var(--ink);font-size:12px;padding:11px 0}
+.mural-gallery-search input::placeholder{color:#6d7c72}
+.mural-gallery-search input::-webkit-search-cancel-button{display:none}
+.mural-gallery-search-field>button{border:0;background:transparent;display:flex;padding:6px;border-radius:3px;margin-right:-5px}
+.mural-gallery-filters{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:2px}
+.mural-gallery-filters>button{font-size:11px;min-height:40px;border:1px solid #d4dacb;border-radius:6px;background:transparent;padding:9px 12px;transition:background .18s,border-color .18s}
+.mural-gallery-filters>button:hover{border-color:#8caa94;background:#eef0e2}
+.mural-gallery-filters>button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fffef5}
+.mural-gallery-result-count{font-size:10px;color:var(--muted);padding:17px 0 22px}
+.mural-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 24px;align-items:start}
+.mural-gallery-item{min-width:0;--patch-color:var(--lime)}
+.mural-gallery-palette-1{--patch-color:#edaf9e}.mural-gallery-palette-2{--patch-color:var(--blue)}.mural-gallery-palette-3{--patch-color:var(--lilac)}.mural-gallery-palette-4{--patch-color:var(--gold)}.mural-gallery-palette-5{--patch-color:#b4d3c0}
+.mural-gallery-card{display:block;text-align:left;border:1px solid #d5dccd;background:#fffef8;border-radius:9px;width:100%;padding:7px;transition:border-color .2s,transform .2s;overflow:hidden;color:var(--ink)}
+.mural-gallery-card:hover{border-color:#85a48b;transform:translateY(-3px)}
+.mural-gallery-card.is-selected{outline:3px solid var(--orange);outline-offset:3px}
+.mural-gallery-card:focus-visible{outline:3px solid var(--orange);outline-offset:5px}
+.mural-gallery-image{display:block;aspect-ratio:1;overflow:hidden;border-radius:4px;background:var(--patch-color)}
+.mural-gallery-image .art-image{width:100%;height:100%;aspect-ratio:1}
+.mural-gallery-caption{display:block;padding:18px 12px 13px;border-top:5px solid var(--patch-color);margin-top:7px}
+.mural-gallery-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:var(--muted);font-size:9px;line-height:1.5}
+.mural-gallery-card-top>span:last-child{white-space:nowrap}
+.mural-gallery-phrase{display:block;font:650 clamp(24px,2.5vw,31px)/1.08 var(--display);letter-spacing:-.8px;margin:12px 0;overflow-wrap:anywhere}
+.mural-gallery-meaning{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:12px;color:#5b7063;line-height:1.7;min-height:40px}
+.mural-gallery-open{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:600;border-top:1px solid #e3e6d9;padding-top:13px;margin-top:20px;gap:12px}
+.mural-gallery-art-missing{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:22px;text-align:center;font-size:12px;color:var(--ink)}
+.mural-gallery-art-missing small{max-width:180px;color:#516958;font-size:10px;line-height:1.6}
+.mural-gallery-no-results{padding:65px 20px 68px;text-align:center;border:1px dashed #c7d0be;border-radius:8px}
+.mural-gallery-no-results h3{font-size:25px;letter-spacing:-.6px}
+.mural-gallery-no-results p{font-size:13px;color:var(--muted);margin:13px 0 22px}
+.mural-gallery-no-results button{background:transparent;border:0;border-bottom:1px solid var(--ink)}
+.mural-gallery-empty{text-align:center;padding:68px 20px 78px}
+.mural-gallery-empty-mark{font:300 64px/1 var(--display);color:var(--orange);margin-bottom:18px}
+.mural-gallery-empty h2{font-size:36px;letter-spacing:-1px}
+.mural-gallery-empty p{max-width:430px;font-size:13px;line-height:1.8;color:var(--muted);margin:17px auto 24px}
+.mural-gallery-footnote{font-size:11px;line-height:1.8;color:var(--muted);max-width:690px;border-top:1px solid var(--line);padding-top:23px;margin-top:41px}
+@media(min-width:1600px){.projector .mural-gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:960px){.mural-gallery-tools{align-items:start;flex-direction:column;gap:16px}.mural-gallery-search{flex:none;width:min(100%,420px)}.mural-gallery-grid{gap:27px 18px}.mural-gallery-caption{padding:16px 8px 10px}.mural-gallery-card-top{flex-direction:column;gap:3px}.mural-gallery-phrase{font-size:27px}}
+@media(max-width:680px){.mural-gallery{padding-top:28px}.mural-gallery-intro{align-items:start;flex-direction:column;gap:12px;margin-bottom:22px}.mural-gallery-intro h2{font-size:33px}.mural-gallery-intro p{font-size:12px}.mural-gallery-intro>span{font-size:10px}.mural-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px}.mural-gallery-filters{gap:6px}.mural-gallery-filters>button{font-size:10px;padding:8px 10px}.mural-gallery-card{padding:5px;border-radius:7px}.mural-gallery-caption{padding:12px 5px 7px}.mural-gallery-phrase{font-size:24px;letter-spacing:-.7px;margin:9px 0}.mural-gallery-meaning{font-size:10px;line-height:1.7;min-height:34px}.mural-gallery-card-top{font-size:8px}.mural-gallery-open{font-size:9px;margin-top:14px;padding-top:11px}.mural-gallery-footnote{font-size:10px}.mural-gallery-empty h2{font-size:30px}}
+@media(max-width:360px){.mural-gallery-grid{grid-template-columns:1fr}.mural-gallery-caption{padding:17px 10px 12px}.mural-gallery-card-top{flex-direction:row}.mural-gallery-phrase{font-size:30px}.mural-gallery-meaning{font-size:12px}.mural-gallery-open{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.mural-gallery-card,.mural-gallery-filters>button{transition:none}.mural-gallery-card:hover{transform:none}}

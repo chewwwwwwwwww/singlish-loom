@@ -1,0 +1,223 @@
+{
+  "styleVersion": "woven-editorial-v1",
+  "common": "Use case: illustration-story. Asset: a square standalone illustration for Singlish Loom, a Singapore cultural artwork and take-home poster. Art direction: sophisticated editorial fabric collage, hand-cut felt and screen-printed shapes on woven linen, visible restrained running stitches, clean bold silhouettes, joyful adult design sensibility. Friendly for children but not childish: no baby proportions, no mascot branding, no glossy toy/3D look, no large cartoon eyes, no scary imagery, realistic insects, fangs, threatening expressions or creepy anatomy. Palette: deep kopitiam teal #174e45, warm paper #f8f6ed, orange #dd6040, lime #e3eba4, sky blue #c9d9ec, lilac #d2c3e4. Use 3-4 of these colours with generous breathing room. A full square illustration, central readable metaphor, carefully composed scene with a small amount of Singapore kopitiam everyday context. Flat graphic forms with tactile woven detail. Strong visual wit; a piece an adult would happily frame. No text, no words, no numbers, no borders, no watermark, no logos. Square 1:1, ideally 1024x1024. The art interprets an expression; it does not depict a claimed true etymology.",
+  "model": "gemini-nano-banana-2.1",
+  "briefs": [
+    {
+      "phrase": "blur sotong",
+      "slug": "blur-sotong",
+      "meaning": "Confused, unaware, or slow to understand what is happening.",
+      "existing": true,
+      "scene": "Interpret blur sotong: pleasantly confused or absent-minded. One friendly abstract cloth squid, made from rounded orange and lilac fabric, is holding an upside-down folded map beside a round teal kopitiam table and one kopi cup. Its small quiet dot eyes look bemused. Two or three loose stitched paths wander past it and gently loop back. No dark ink cloud, no realistic sea creature, no tentacle threat. Convey everyday confusion with warmth and visual cleverness, not stupidity or ridicule. Background warm woven paper with a tiny geometric housing-block silhouette.",
+      "alt": "A gentle fabric squid holding a folded map upside down beside a kopitiam table, surrounded by wandering stitched paths."
+    },
+    {
+      "phrase": "kanchiong spider",
+      "slug": "kanchiong-spider",
+      "meaning": "An anxious, panicky or flustered person.",
+      "existing": true,
+      "scene": "Interpret kanchiong spider: anxious, flustered, rushing to do everything at once. Do NOT draw a spider or any insect. Instead make one beautifully simple orange kopi cup character with eight soft curved fabric ribbon arms, balancing a clock without numbers, keys, a kopi saucer and a folded napkin. No face is necessary; movement, a tilted cup and clean stitched motion lines convey the hurry. Rounded shapes, light teal/lime/lilac backdrop, a small breakfast-table suggestion. It should feel witty, bustling and safe, never a monster, creepy or scary.",
+      "alt": "An abstract eight-armed kopi cup trying to balance a clock, keys, and breakfast in a cheerful fabric collage."
+    },
+    {
+      "phrase": "stun like vegetable",
+      "slug": "stun-like-vegetable",
+      "meaning": "So shocked or bewildered that you freeze or cannot respond.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"stun like vegetable\". Contextual meaning: So shocked or bewildered that you freeze or cannot respond. One tall, simple lilac-and-lime fabric bok choy stands perfectly upright beside a kopi saucer, absolutely motionless. A folded orange napkin and tiny spoon hover quietly around it as if a lively breakfast scene has suddenly paused. Small stitched rings suggest surprise without a face or eyes. Make the contrast between frozen vegetable and paused everyday objects witty and beautifully spare. No frightened person, no ridicule, no realistic anatomy.",
+      "alt": "A fabric bok choy standing motionless beside a kopi saucer, with a napkin and spoon suspended in a quiet moment of surprise."
+    },
+    {
+      "phrase": "pattern more than badminton",
+      "slug": "pattern-more-than-badminton",
+      "meaning": "Having too many antics, excuses or elaborate ways of doing things.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"pattern more than badminton\". Contextual meaning: Having too many antics, excuses or elaborate ways of doing things. A single orange-and-teal badminton racket is the central graphic shape. Instead of a normal string bed, its woven strings loop into an elaborate tangle of lilac ribbons, zigzags, bows and flourishes, far more elaborate than the modest shuttlecock waiting beside it. A tiny kopi cup rests in one corner. Convey excessive antics and unnecessary complications with visual playfulness. No people, no logos, no letters; keep the silhouette readable and the surrounding linen spacious.",
+      "alt": "A badminton racket filled with elaborate ribbons and stitched flourishes beside a simple shuttlecock."
+    },
+    {
+      "phrase": "my grandma run faster than you",
+      "slug": "my-grandma-run-faster-than-you",
+      "meaning": "A teasing taunt that someone is moving too slowly.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"my grandma run faster than you\". Contextual meaning: A teasing taunt that someone is moving too slowly. Two adult-sized fabric walking shoes move along a simple stitched park path: a cheerful orange shoe with a restrained floral embroidery detail strides ahead, while a large sky-blue trainer lags comfortably behind. A lilac sock peeks from the orange shoe. Use sweeping clean motion lines and one tiny geometric housing block, suggesting a teasing comparison of speed with affection. No elderly caricature, no person, no faces on shoes, no humiliation, no finish-line text.",
+      "alt": "An orange floral walking shoe striding ahead of a blue trainer along a stitched park path."
+    },
+    {
+      "phrase": "your grandfather road issit?",
+      "slug": "your-grandfather-road-issit",
+      "meaning": "A sarcastic challenge to someone obstructing a public space or acting as if they own it.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"your grandfather road issit?\". Contextual meaning: A sarcastic challenge to someone obstructing a public space or acting as if they own it. A boldly oversized orange kopitiam chair sits sideways across a narrow teal public walkway made from fabric tiles, cheekily occupying almost all the shared space. Two small lilac and blue chairs wait to pass on either side. The path clearly continues beyond the oversized chair, with a tiny table and kopi cup suggesting a shared neighbourhood setting. Make the obstruction absurd and socially witty rather than aggressive. No people, traffic danger, signs, words or ownership claim.",
+      "alt": "An oversized orange chair blocking a shared tiled walkway while two smaller chairs wait to pass."
+    },
+    {
+      "phrase": "steady pom pi pi",
+      "slug": "steady-pom-pi-pi",
+      "meaning": "Calm, assured and collected under pressure.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"steady pom pi pi\". Contextual meaning: Calm, assured and collected under pressure. A calm teal kopi cup rests perfectly balanced on a lilac saucer atop three slightly tilted fabric breakfast trays. Orange and lime ribbons swirl briskly around it, but the cup and its single graceful stitched steam curve remain poised. One tiny folded napkin anchors the composition. Convey composure under pressure through a stable central silhouette surrounded by light motion. No police imagery, sirens, disaster, faces or precarious threat.",
+      "alt": "A steady teal kopi cup balanced on tilted trays while soft colourful ribbons swirl around it."
+    },
+    {
+      "phrase": "double confirm",
+      "slug": "double-confirm",
+      "meaning": "Check or confirm again to be extra sure.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"double confirm\". Contextual meaning: Check or confirm again to be extra sure. Two oversized circular magnifying glasses, one teal and one lilac, carefully inspect the same neatly tied orange tissue packet from opposite sides. Their stitched viewing circles echo each other, suggesting a second check and extra certainty. A small kopi saucer sits quietly behind. Clear symmetrical editorial composition with two purposeful inspection tools and one humble object. No writing, numbers, checkmark text, eyes or people.",
+      "alt": "Two fabric magnifying glasses examining the same neatly tied orange tissue packet."
+    },
+    {
+      "phrase": "confirm plus chop",
+      "slug": "confirm-plus-chop",
+      "meaning": "Absolutely certain; guaranteed.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"confirm plus chop\". Contextual meaning: Absolutely certain; guaranteed. A simple orange rubber stamp with a chunky fabric handle has just pressed a teal four-petal rosette seal onto a folded lilac envelope. The seal is a purely decorative geometric impression without letters or words. A tidy kopi cup and folded napkin sit far back, with one confident stitched line linking stamp and seal. Convey official-feeling certainty and a satisfying final flourish. No document text, government emblems, logos or historical-origin claim.",
+      "alt": "An orange fabric stamp beside a folded envelope carrying a crisp teal rosette seal."
+    },
+    {
+      "phrase": "chop chop curry pok",
+      "slug": "chop-chop-curry-pok",
+      "meaning": "Hurry up; get it done quickly.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"chop chop curry pok\". Contextual meaning: Hurry up; get it done quickly. One beautifully shaped orange fabric curry puff speeds along a long teal ribbon that curls like a brisk conveyor belt across a breakfast table. A little lilac serving tray supports the puff, and clean stitched motion lines trail behind it. A clock with no numbers and a tiny kopi cup hint at the morning hurry. Emphasise quick action and savoury visual wit, with the curry puff as the hero. No knives, food chopping, people, faces or unsafe racing scene.",
+      "alt": "An orange curry puff on a small serving tray moving briskly along a curling fabric ribbon."
+    },
+    {
+      "phrase": "chope",
+      "slug": "chope",
+      "meaning": "Reserve a seat or place, often with a tissue packet or another personal item.",
+      "existing": true,
+      "scene": "Interpret chope: reserve a seat with a tissue packet. A beautifully humble blue-and-lilac tissue packet is the central hero, resting on a round teal kopitiam table. A curved orange chair waits nearby. A single white tissue protrudes like a gentle folded flag. Warm stitched sunlight and two simple cups suggest a place saved for a friend. Compose with the quiet confidence of an editorial still life. No person, no cartoon face, no words on the packet. Celebrate a tiny everyday social ritual.",
+      "alt": "A small tissue packet holding a place at a round kopitiam table, with a chair and warm stitched sunlight."
+    },
+    {
+      "phrase": "gostun",
+      "slug": "gostun",
+      "meaning": "Reverse or move backwards.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"gostun\". Contextual meaning: Reverse or move backwards. A small sky-blue fabric serving trolley holding one orange kopi cup gently rolls backwards along a teal stitched path. The trailing path folds into two broad curved arrow shapes pointing back to an empty lilac parking space beside a kopitiam table. Keep the wheels simple flat circles and the reverse movement clear, slow and safe. No driver, car crash, traffic, letters, numbers or nautical history imagery.",
+      "alt": "A blue serving trolley with a kopi cup reversing along a stitched path toward an empty space."
+    },
+    {
+      "phrase": "can is can",
+      "slug": "can-is-can",
+      "meaning": "It is possible; depending on context, either reassurance or the start of a 'possible, but…' reservation.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"can is can\". Contextual meaning: It is possible; depending on context, either reassurance or the start of a 'possible, but…' reservation. A small orange fabric footbridge confidently unfolds across a modest gap between two teal breakfast-table shapes, joining a blue kopi saucer on one side to a lilac tissue packet on the other. The bridge is sturdy and simple, with one small neat stitched seam indicating the practical care needed to make it work. Convey possibility and reassurance through a completed connection. No people, danger, faces, text or triumphant mascot.",
+      "alt": "An orange fabric bridge connecting two breakfast-table shapes across a small gap."
+    },
+    {
+      "phrase": "win liao lor",
+      "slug": "win-liao-lor",
+      "meaning": "A sarcastic or exasperated 'you win already', often reacting to something ridiculous.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"win liao lor\". Contextual meaning: A sarcastic or exasperated 'you win already', often reacting to something ridiculous. On a quiet kopitiam tabletop, a large lilac kopi cup occupies the centre of an abstract fabric game board with no numbers or writing. A smaller orange cup has slid to one side, its folded white napkin drooping like a tiny surrender flag. One loose stitched curl conveys a resigned sigh. The relationship should feel knowingly absurd and gently exasperated, not celebratory or hostile. No people, faces, medals, competition logos or words.",
+      "alt": "A small orange kopi cup beside a drooping napkin while a larger lilac cup takes the centre of a fabric game board."
+    },
+    {
+      "phrase": "go fly kite",
+      "slug": "go-fly-kite",
+      "meaning": "Go away; stop bothering me.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"go fly kite\". Contextual meaning: Go away; stop bothering me. A clean orange-and-lilac diamond kite floats high above a small teal kopi cup, its long stitched tail gently carrying an empty pale-blue speech-bubble shape away into the open linen sky. A tiny geometric housing block sits low in the background. The cup remains peacefully on its saucer below. Convey a light-hearted request to leave someone in peace, with airy space and graceful movement. No people, written speech, threatening gestures or angry faces.",
+      "alt": "A bright fabric kite carrying an empty speech bubble away from a quiet kopi cup."
+    },
+    {
+      "phrase": "wake up your idea",
+      "slug": "wake-up-your-idea",
+      "meaning": "Get a grip, think straight or pay attention.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"wake up your idea\". Contextual meaning: Get a grip, think straight or pay attention. A bold orange fabric light bulb rises from behind a small teal alarm clock with a blank numberless face, as if a sleepy breakfast-table idea has suddenly become clear. A lilac napkin opens into crisp folds below, beside one kopi saucer. Use three clean stitched rays and one poised central silhouette to convey attention and a practical change of mind. No person, bed scene, angry scolding, eyes, electrical danger or written symbols.",
+      "alt": "An orange fabric light bulb rising above a teal alarm clock and a neatly unfolding napkin."
+    },
+    {
+      "phrase": "one time good one",
+      "slug": "one-time-good-one",
+      "meaning": "Do it once and do it well; sometimes a thorough action or scolding.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"one time good one\". Contextual meaning: Do it once and do it well; sometimes a thorough action or scolding. A single long orange stitched thread sweeps confidently across the linen and closes into one beautifully precise square seam around a neatly folded sky-blue napkin. A small teal kopi cup and simple lilac plate sit nearby, perfectly aligned. The composition celebrates doing one careful action well on the first attempt. Make the stitch path bold and satisfying, with no tangled leftovers. No needles, sharp tools, person, written score or numbered target.",
+      "alt": "One confident stitched line completing a precise square around a neatly folded blue napkin."
+    },
+    {
+      "phrase": "i.e. to say",
+      "slug": "i-e-to-say",
+      "meaning": "A clarification filler: 'that is to say'.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"i.e. to say\". Contextual meaning: A clarification filler: 'that is to say'. Two overlapping empty fabric speech bubbles, one lilac and one sky-blue, gently unfold into a single clear orange ribbon pointing toward a humble teal kopi cup on its saucer. A loose stitched loop becomes a clean straight seam along the ribbon. Convey clarification in an everyday conversation: making a muddled thought easier to follow. Keep the speech bubbles completely blank. No letters, punctuation, symbols, faces or people.",
+      "alt": "Two blank fabric speech bubbles unfolding into a clear orange ribbon beside a kopi cup."
+    },
+    {
+      "phrase": "you think i thought who confirm",
+      "slug": "you-think-i-thought-who-confirm",
+      "meaning": "A rebuke for relying on assumptions instead of checking.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"you think i thought who confirm\". Contextual meaning: A rebuke for relying on assumptions instead of checking. Three empty sky-blue, orange and lilac speech bubbles overlap above a loose tangle of stitched thread. Beneath them, one large teal magnifying glass focuses on a single neatly tied knot beside a plain kopi saucer. Contrast floating assumptions with a careful actual check, using clean graphic geometry and spacious linen. Speech bubbles and all objects must be completely unmarked. No written questions, accusation, angry faces or people.",
+      "alt": "Three blank speech bubbles above tangled threads while a magnifying glass focuses on one carefully tied knot."
+    },
+    {
+      "phrase": "die die must",
+      "slug": "die-die-must",
+      "meaning": "Must do it no matter what; strong insistence.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"die die must\". Contextual meaning: Must do it no matter what; strong insistence. A single sturdy orange fabric walking shoe climbs three low teal steps toward a neatly waiting lilac kopi cup. Soft blue ribbons sweep past like a mild headwind, but the shoe's clean stitched path continues steadily upward. Convey determination and following through with everyday warmth. The expression is idiomatic insistence: never illustrate death, danger, injury, weapons, violence, skulls, graves, impossible cliffs or a frightened person. No face on the shoe.",
+      "alt": "A sturdy orange walking shoe steadily climbing low fabric steps toward a waiting kopi cup."
+    },
+    {
+      "phrase": "shiok",
+      "slug": "shiok",
+      "meaning": "Delightfully satisfying or enjoyable; also delicious or excellent.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"shiok\". Contextual meaning: Delightfully satisfying or enjoyable; also delicious or excellent. An inviting teal kopi cup, one orange curry puff and a small lilac saucer form a beautifully balanced breakfast still life in the centre. Warm lime and orange stitched sunlight curls gently around them, with one elegant steam loop creating a relaxed halo of pleasure. Tactile fabrics, generous space and delectable everyday satisfaction. No people, faces on food, hearts, emojis, religious symbols or words; sophisticated and quietly joyful.",
+      "alt": "A kopi cup and orange curry puff surrounded by warm stitched sunlight and a gentle steam loop."
+    },
+    {
+      "phrase": "sorry, no cure",
+      "slug": "sorry-no-cure",
+      "meaning": "Saying sorry cannot undo the damage.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"sorry, no cure\". Contextual meaning: Saying sorry cannot undo the damage. A tipped orange kopi cup has left a small teal coffee stain on a pale linen tabletop. A neatly folded lilac envelope and blue cleaning napkin lie nearby, but the visible stain remains. Use a restrained stitched outline around the stain to show that an apology cannot simply erase what happened. Gentle everyday regret with warm, thoughtful composition. No person, accusation, tears, medicine, illness, shattered glass, injury or words on the envelope.",
+      "alt": "A tipped kopi cup beside a lasting fabric coffee stain, a folded envelope and a cleaning napkin."
+    },
+    {
+      "phrase": "last touch",
+      "slug": "last-touch",
+      "meaning": "The last person to touch or handle something is responsible for it.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"last touch\". Contextual meaning: The last person to touch or handle something is responsible for it. Three simple fabric oven-mitt shapes, teal, blue and lilac, form a gentle passing sequence around one orange serving tray. The final lilac mitt securely holds the tray, with a small blank fabric tag tied to it by a neat stitched thread. A single kopi cup rests safely on the tray. Convey the responsibility that passes to the last person handling something. Mitts are flat abstract cloth shapes with no realistic fingers, arms, faces or anatomy. No tag writing.",
+      "alt": "Three abstract fabric mitts passing a serving tray, with the final mitt holding the tray and its blank tag."
+    },
+    {
+      "phrase": "chim",
+      "slug": "chim",
+      "meaning": "Deep, complex or difficult to understand.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"chim\". Contextual meaning: Deep, complex or difficult to understand. A beautifully intricate square fabric puzzle sits on a teal kopitiam table: nested orange, lilac and blue folded doorways recede into a deep geometric centre, with a stitched path winding through several layers. One small plain kopi cup beside it provides everyday scale. Convey something deep and hard to understand through elegant spatial complexity. No dark abyss, frightening tunnel, people, eyes, mathematical text, letters or mystical symbols.",
+      "alt": "A layered fabric puzzle with nested folded doorways and a winding stitched path beside a kopi cup."
+    },
+    {
+      "phrase": "atas",
+      "slug": "atas",
+      "meaning": "Posh, high-class or socially pretentious.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"atas\". Contextual meaning: Posh, high-class or socially pretentious. One elegant lilac porcelain-style fabric teacup sits high on a small stepped teal pedestal, with a delicate orange curved handle, scalloped saucer and finely stitched decorative trim. Below it, a humble sky-blue kopi cup rests on the ordinary tabletop. The elevated cup feels delightfully posh and a little over-the-top, with affectionate visual humour rather than judgement. No crowns, royal insignia, branded luxury objects, class stereotypes, people or faces.",
+      "alt": "An ornate lilac teacup perched on a small pedestal above a humble blue kopi cup."
+    },
+    {
+      "phrase": "orhor",
+      "slug": "orhor",
+      "meaning": "Caught you! You are in trouble now.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"orhor\". Contextual meaning: Caught you! You are in trouble now. A folded lilac napkin has lifted just enough to reveal one orange fabric biscuit that was tucked behind a teal kopi cup. A broad warm stitched beam of sunlight lands directly on the biscuit, and a tiny blue saucer waits nearby. Convey a playful caught-you moment through the surprising reveal of a harmless snack. No person, finger-pointing, surveillance camera, accusation, crime, punishment, angry face or text.",
+      "alt": "A fabric biscuit revealed beneath a lifted napkin beside a kopi cup, caught in a warm stitched beam of sunlight."
+    },
+    {
+      "phrase": "aiyo",
+      "slug": "aiyo",
+      "meaning": "An exclamation of dismay, shock, annoyance or impatience, shaped by tone.",
+      "existing": false,
+      "scene": "Interpret the Singlish expression \"aiyo\". Contextual meaning: An exclamation of dismay, shock, annoyance or impatience, shaped by tone. An orange fabric kopi cup leans slightly on its saucer beside two muddled blue spoons and a softly slumped lilac napkin. One long teal ribbon curves down and away like a very expressive sigh, ending in a loose stitched loop. A tiny harmless coffee drop gives the everyday mishap a warm touch. Convey mild dismay and exasperation with object posture and rhythm. No person, face, tears, scary scene, injury, cartoon speech or text.",
+      "alt": "A leaning kopi cup, muddled spoons and a slumped napkin beneath a long ribbon shaped like an exasperated sigh."
+    }
+  ]
+}

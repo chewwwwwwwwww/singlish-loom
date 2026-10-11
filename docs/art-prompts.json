@@ -1,0 +1,24 @@
+{
+  "styleVersion": "woven-editorial-v1",
+  "common": "Use case: illustration-story. Asset: a square standalone illustration for Singlish Loom, a Singapore cultural artwork and take-home poster. Art direction: sophisticated editorial fabric collage, hand-cut felt and screen-printed shapes on woven linen, visible restrained running stitches, clean bold silhouettes, joyful adult design sensibility. Friendly for children but not childish: no baby proportions, no mascot branding, no glossy toy/3D look, no large cartoon eyes, no scary imagery, realistic insects, fangs, threatening expressions or creepy anatomy. Palette: deep kopitiam teal #174e45, warm paper #f8f6ed, orange #dd6040, lime #e3eba4, sky blue #c9d9ec, lilac #d2c3e4. Use 3-4 of these colours with generous breathing room. A full square illustration, central readable metaphor, carefully composed scene with a small amount of Singapore kopitiam everyday context. Flat graphic forms with tactile woven detail. Strong visual wit; a piece an adult would happily frame. No text, no words, no numbers, no borders, no watermark, no logos. Square 1:1, ideally 1024x1024. The art interprets an expression; it does not depict a claimed true etymology.",
+  "briefs": [
+    {
+      "phrase": "blur sotong",
+      "slug": "blur-sotong",
+      "alt": "A gentle fabric squid holding a folded map upside down beside a kopitiam table, surrounded by wandering stitched paths.",
+      "scene": "Interpret blur sotong: pleasantly confused or absent-minded. One friendly abstract cloth squid, made from rounded orange and lilac fabric, is holding an upside-down folded map beside a round teal kopitiam table and one kopi cup. Its small quiet dot eyes look bemused. Two or three loose stitched paths wander past it and gently loop back. No dark ink cloud, no realistic sea creature, no tentacle threat. Convey everyday confusion with warmth and visual cleverness, not stupidity or ridicule. Background warm woven paper with a tiny geometric housing-block silhouette."
+    },
+    {
+      "phrase": "kanchiong spider",
+      "slug": "kanchiong-spider",
+      "alt": "An abstract eight-armed kopi cup trying to balance a clock, keys, and breakfast in a cheerful fabric collage.",
+      "scene": "Interpret kanchiong spider: anxious, flustered, rushing to do everything at once. Do NOT draw a spider or any insect. Instead make one beautifully simple orange kopi cup character with eight soft curved fabric ribbon arms, balancing a clock without numbers, keys, a kopi saucer and a folded napkin. No face is necessary; movement, a tilted cup and clean stitched motion lines convey the hurry. Rounded shapes, light teal/lime/lilac backdrop, a small breakfast-table suggestion. It should feel witty, bustling and safe, never a monster, creepy or scary."
+    },
+    {
+      "phrase": "chope",
+      "slug": "chope",
+      "alt": "A small tissue packet holding a place at a round kopitiam table, with a chair and warm stitched sunlight.",
+      "scene": "Interpret chope: reserve a seat with a tissue packet. A beautifully humble blue-and-lilac tissue packet is the central hero, resting on a round teal kopitiam table. A curved orange chair waits nearby. A single white tissue protrudes like a gentle folded flag. Warm stitched sunlight and two simple cups suggest a place saved for a friend. Compose with the quiet confidence of an editorial still life. No person, no cartoon face, no words on the packet. Celebrate a tiny everyday social ritual."
+    }
+  ]
+}
