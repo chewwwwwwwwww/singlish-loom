@@ -7,7 +7,7 @@ export interface PhraseVariant {
   resolution: "exact" | "variant" | "spelling";
 }
 
-function distance(a: string, b: string): number {
+export function phraseDistance(a: string, b: string): number {
   const row = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i++) {
     let diagonal = row[0]; row[0] = i;
@@ -34,11 +34,24 @@ export function resolvePhraseVariant(phrase: string): PhraseVariant | null {
     entry,
     edits: Math.min(...[entry.term, ...(entry.aliases ?? [])].map(alias => {
       const candidate = compactPhrase(alias);
-      return candidate.length >= 5 ? distance(input, candidate) : Infinity;
+      return candidate.length >= 5 ? phraseDistance(input, candidate) : Infinity;
     })),
   })).filter(candidate => candidate.edits <= threshold).sort((a, b) => a.edits - b.edits);
   if (!candidates.length || candidates[0].edits === candidates[1]?.edits) return null;
   return { entry: candidates[0].entry, resolution: "spelling" };
+}
+
+/** Candidate discovery is wider than automatic correction. Similar spelling
+ * offers a choice; it does not establish that two phrases have one meaning. */
+export function isNearPhrase(input: string, candidate: string): boolean {
+  const a = compactPhrase(input), b = compactPhrase(candidate);
+  const threshold = a.length >= 5 ? 2 : a.length >= 4 ? 1 : 0;
+  return Math.abs(a.length - b.length) <= threshold && phraseDistance(a, b) <= threshold;
+}
+
+export function isClearSpellingVariant(input: string, candidate: string): boolean {
+  const a = compactPhrase(input), b = compactPhrase(candidate);
+  return a === b || (a.length >= 7 && phraseDistance(a, b) <= (a.length >= 16 ? 2 : 1));
 }
 
 /** Spelling normalization is kept separate from evidence of a meaning. */

@@ -65,7 +65,7 @@ await test("write type and body limits apply even without a Content-Length heade
 });
 
 await test("same-origin writes preserve exact JSON and request IDs while stripping credentials", async () => {
-  const body = '{ "phrase": "kan chiong spider", "voiceMode": "lyric", "requestId": "00000000-0000-4000-8000-000000000001" }';
+  const body = '{ "phrase": "my original kopi expression", "voiceMode": "lyric", "allowCreative": true, "requestId": "00000000-0000-4000-8000-000000000001" }';
   const { calls, fetcher } = stub(Response.json({ id: "saved-id" }, { status: 201, headers: { "cache-control": "no-store", "set-cookie": "private=secret", "authorization": "secret" } }));
   const response = await forwardLoomRequest(write("/api/generate", body, {
     cookie: "login=private", authorization: "Bearer private", "x-forwarded-host": "attacker.example", "cf-connecting-ip": "spoofed",

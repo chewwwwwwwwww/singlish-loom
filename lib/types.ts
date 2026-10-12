@@ -85,6 +85,8 @@ export interface CorpusTerm {
 export interface PhraseSuggestion {
   phrase: string;
   meaning: string;
+  source?: string | null;
+  sourceUrl?: string | null;
 }
 
 export interface AcceptedPhrase {
@@ -104,11 +106,13 @@ export interface AcceptedPhrase {
 
 export interface UnknownPhrase {
   accepted: false;
-  code: "UNKNOWN_PHRASE" | "REFERENCE_UNAVAILABLE";
+  code: "UNKNOWN_PHRASE" | "AMBIGUOUS_PHRASE" | "REFERENCE_UNAVAILABLE";
   error: string;
   phrase: string;
   suggestions: PhraseSuggestion[];
   retryable?: boolean;
+  // Only a completed lookup with no supported candidate enables this option.
+  canCreateOriginal?: boolean;
 }
 
 export type PhraseCheckResponse = AcceptedPhrase | UnknownPhrase;

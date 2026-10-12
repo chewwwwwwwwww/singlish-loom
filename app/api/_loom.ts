@@ -76,7 +76,7 @@ export async function postGenerate(request: Request): Promise<Response> {
     if (Number(request.headers.get("content-length") ?? 0) > 2048) return json({ error: "This phrase is too long." }, 413);
     const raw = await request.text();
     if (raw.length > 2048) return json({ error: "This phrase is too long." }, 413);
-    let payload: { phrase?: unknown; voiceMode?: unknown; requestId?: unknown };
+    let payload: { phrase?: unknown; voiceMode?: unknown; requestId?: unknown; allowCreative?: unknown };
     try { payload = JSON.parse(raw); } catch { return json({ error: "Your phrase could not be read. Try again." }, 400); }
     if (!payload || typeof payload !== "object") return json({ error: "Type a Singlish phrase first." }, 400);
     const validated = validatePhrase(payload.phrase);
@@ -90,9 +90,9 @@ export async function postGenerate(request: Request): Promise<Response> {
     if (prior) return json((await decorateRecords([prior]))[0]);
     // Re-resolve every new submission server-side. Visitor-supplied meanings,
     // verification flags and check responses never establish cultural evidence.
-    // Clear spellings share one canonical phrase; other safe input is explicitly
-    // a creative interpretation, even when the dictionary is unavailable.
-    const entry = await requireCheckedTerm(validated.phrase, { db: runtime.DB });
+    // Original expressions require an explicit choice and a completed dictionary
+    // lookup with no supported candidates. A provider outage never verifies input.
+    const entry = await requireCheckedTerm(validated.phrase, { db: runtime.DB, allowCreative: payload.allowCreative === true });
     const phrase = entry.term;
     if (!await claimSubmission(request)) return json({ error: "The loom is busy. Give it a moment, then try again." }, 429, { "Retry-After": "2" });
     const generated = await generateText(phrase, voiceMode, {
@@ -130,7 +130,7 @@ export async function postCheck(request: Request): Promise<Response> {
   if (origin && origin !== new URL(request.url).origin) return json({ error: "Open Singlish Loom directly to check a phrase." }, 403);
   if (!request.headers.get("content-type")?.includes("application/json")) return json({ error: "Send your phrase as JSON." }, 415);
   if (Number(request.headers.get("content-length") ?? 0) > 2048) return json({ error: "This phrase is too long." }, 413);
-  let payload: { phrase?: unknown } | null;
+  let payload: { phrase?: unknown; allowCreative?: unknown } | null;
   try {
     const raw = await request.text();
     if (raw.length > 2048) return json({ error: "This phrase is too long." }, 413);
@@ -138,7 +138,7 @@ export async function postCheck(request: Request): Promise<Response> {
   } catch { return json({ error: "Your phrase could not be read. Try again." }, 400); }
   const validated = validatePhrase(payload?.phrase);
   if ("error" in validated) return json({ error: validated.error }, 400);
-  const result = await checkPhrase(validated.phrase, { db: runtime.DB });
+  const result = await checkPhrase(validated.phrase, { db: runtime.DB, allowCreative: payload?.allowCreative === true });
   return json(result, result.accepted ? 200 : result.retryable ? 503 : 422);
 }
 
